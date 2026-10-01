@@ -1,0 +1,31 @@
+name: Broker importer request
+description: Ask for a dedicated importer for your broker's export.
+labels: [broker]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Until a dedicated importer exists, the **generic CSV template** on the Import page works for
+        any broker. A sample export makes a dedicated importer possible. **Remove account numbers,
+        names and real trades first**; invented prices are fine as long as the layout is exact.
+  - type: input
+    id: broker
+    attributes:
+      label: Broker
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: How you download the export
+      description: The menu path in your broker's site or app, and the file type.
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Redacted sample
+      description: Paste the header and a few rows, or attach the file. Include a stock, and an option or future if you trade them.
+      render: text
+    validations:
+      required: true

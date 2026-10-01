@@ -1,0 +1,44 @@
+Trading Journal AI, set up for MetaTrader 5 (Ava) gold trading
+================================================================
+
+1. Install once (if not already on this PC):
+   - Python 3.11 or newer: https://www.python.org/downloads/  (tick "Add python.exe to PATH")
+   - Node.js LTS: https://nodejs.org/
+
+2. Double-click setup.bat (once). It installs everything and creates backend\.env.
+
+3. Double-click launch.bat (every time). Then open http://localhost:3010 in your browser.
+
+4. In the app: add an account (for example "Ava MT5", broker "MetaTrader 5"),
+   then go to Import, choose "MetaTrader 5 (MT5)" and drop your MT5 report.
+
+Exporting from MT5:
+   History tab -> right-click -> Report -> save as Excel (.xlsx) or HTML.
+   You can import the same report again at any time: trades already in the journal are skipped.
+
+Times:
+   The MT5 report is in UTC. backend\.env has MT5_TIME_OFFSET_HOURS=2, which moves
+   every trade to South African time. Change it only if your broker's report time changes.
+
+Gold only, in rand:
+   Only XAUUSD / GOLD positions are imported; anything else in the report is ignored.
+   Profit and loss come straight from MT5's Profit (+ Swap) column, in rand, exactly as Ava booked them.
+   Gold prices, stops and targets stay in US dollars. Where the app works out money from prices
+   (the risk of a stop-loss you enter, and "what if" exits), it converts dollars to rand with
+   REACT_APP_USD_TO_ACCOUNT=16.2 in frontend\.env (the rate Ava used on your Aug-Sep trades).
+   Change that number if the rand moves a lot, then restart launch.bat.
+
+Optional:
+   ANTHROPIC_API_KEY in backend\.env turns on the AI diary analysis, Day Review and Brain chat.
+
+Gold charts on every trade:
+   Each trade page shows a gold chart in SA time with your fills, entry/exit lines and EMA 9/21.
+   Prices come from, in this order:
+   1. Your TradingView price file (Import page -> "Gold price data for charts"). Claude exports
+      FOREX.com XAUUSD candles from TradingView for you; drop the .csv there. Top it up every
+      week or two, because TradingView only returns the most recent weeks of 5-minute candles.
+   2. Dukascopy, downloaded automatically (free, no account) for anything the file does not cover.
+      Downloads are saved, so each day is only fetched once. Needs an internet connection.
+   The line under each chart says which source it used.
+
+Your data stays on this PC in backend\trading_journal.db. Back it up by copying that one file.
