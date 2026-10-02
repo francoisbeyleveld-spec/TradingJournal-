@@ -435,7 +435,7 @@ function GoldPrices() {
   const [err, setErr] = useState(null);
   const [summary, setSummary] = useState([]);
 
-  const load = () => importApi.priceSummary().then(r => setSummary(r.data || [])).catch(() => {});
+  const load = () => importApi.priceSummary().then(r => setSummary(Array.isArray(r.data) ? r.data : [])).catch(() => {});
   useEffect(() => { load(); }, []);
 
   const upload = async () => {

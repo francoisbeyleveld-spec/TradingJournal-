@@ -198,18 +198,20 @@ test('Trade View opens Trade Details with all five tabs, back and previous/next'
   expect(screen.getByRole('button', { name: 'Delete execution 1' })).toBeInTheDocument();
 });
 
-test('Import keeps broker CSV import and diary analysis, with keyboard dropzones', async () => {
+test('Import keeps broker file import, diary analysis and gold prices, with keyboard dropzones', async () => {
   await renderApp();
   fireEvent.click(within(screen.getByRole('banner')).getByRole('button', { name: /^Import$/ }));
-  expect(await screen.findByRole('heading', { name: /Import Broker CSV/ })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: /Import Broker File/ })).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: /Analyze Trading Diary/ })).toBeInTheDocument();
-  // Both supported brokers stay selectable, with auto-detect as the default.
+  expect(screen.getByRole('heading', { name: /Gold price data for charts/ })).toBeInTheDocument();
+  // Every supported broker stays selectable, with auto-detect as the default.
   const broker = screen.getByLabelText('Broker');
   expect(broker).toHaveValue('auto');
   expect(within(broker).getByRole('option', { name: /Interactive Brokers/ })).toBeInTheDocument();
   expect(within(broker).getByRole('option', { name: /Thinkorswim/ })).toBeInTheDocument();
+  expect(within(broker).getByRole('option', { name: /MetaTrader 5/ })).toBeInTheDocument();
   const dropzones = screen.getAllByRole('button', { name: /Press Enter to browse/ });
-  expect(dropzones).toHaveLength(2);
+  expect(dropzones).toHaveLength(3);
   dropzones.forEach(z => expect(z).toHaveAttribute('tabindex', '0'));
 });
 
